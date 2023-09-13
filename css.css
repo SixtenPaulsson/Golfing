@@ -1,0 +1,14 @@
+.courses .mainDiv div {
+	width: 400px;
+	padding: 1%;
+	border: 3px solid #ddd;
+    margin: 1px;
+}
+
+@media screen and (min-width: 600px) {
+
+	.courses div {
+		display: flex;
+		display: block;
+	}
+}

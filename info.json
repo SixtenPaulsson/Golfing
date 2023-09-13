@@ -1,0 +1,9 @@
+{
+	"name": "Villshärads Fotbollsgolf",
+	"court":[
+    {"id":1, "par":3, "info":"Bollen över stocken"},
+    {"id":2, "par":4, "info":"Runda stolparna"},
+    {"id":3, "par":4, "info":"Runda stolpen"}
+
+]
+}
