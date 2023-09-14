@@ -1,7 +1,6 @@
 //Tar från local storage samt renderar in dom
 let persons = JSON.parse(localStorage.getItem("persons")) || {};
 for(let p in persons){
-    getCourt();
     renderOne(persons[p]);
 }
 
@@ -21,7 +20,7 @@ function handleSubmit(e){
     //Preventar att saken fuckar
     e.preventDefault();
     //Checkar så att man har gett den ett namn (Man kan dock fortfarande ge samma namn som något som redan finns)
-  if(document.querySelector("#namnBox").value!=''){
+  if(document.querySelector("#namnBox").value!='' && DoesPlayerExist(e.target.name.value)==false){
 //Ett objekt med namn typning
     persons[e.target.name.value] = {
         //Namnet(finns säkert nåt sätt att få fram det på bättre men jag har det som en grej iaf)
@@ -44,6 +43,15 @@ else{
     console.log("Skriv i saken!");
 }
 }
+
+function DoesPlayerExist(playerName){
+    for(let p in persons){
+        if(p==playerName){
+            return true;
+        }
+    }
+return false;
+}
 //Renderar ett namn
 function renderOne(person){
     
@@ -54,10 +62,12 @@ function renderOne(person){
     btn.type="button";
     btn.addEventListener("click",removePlayer)
     btn.value="Remove"
+    btn.className=person.name+"-person";
     btn.id=person.name;
     // lägger id på diven
-    div.id = person.name;
-    console.log(div.id);
+
+    div.id = person.name+"-person";
+    //console.log(div.id);
     //Lägger till texten till den
     h2.innerText = person.name+" ";
     //Slänger in h2 på diven
@@ -69,11 +79,14 @@ function renderOne(person){
 
 }
 function removePlayer(e){
-    document.getElementById(e.target.id).remove();
-    console.log(e.target.id);
+    let div=document.getElementById(e.target.className);
+    div.remove();
+
+    console.log(e.target.classList);
     delete persons[e.target.id];
     console.log(persons);
     persistToLocaleStorage();
+    updateScoreBoard();
     if(Object.keys(persons).length==0){
         if(document.querySelector(".mainDiv")!=undefined){
             document.querySelector(".mainDiv").remove();
@@ -82,7 +95,7 @@ function removePlayer(e){
             document.querySelector(".ResultatsDiv").remove();
         }
     }
-    updateScoreBoard();
+    
 }
 
 //Funktionen kollar i json filen och hämtar ut sakerna
@@ -224,12 +237,6 @@ Keys.sort((a,b)=>persons[a]["score"]-persons[b]["score"]);
 
 Keys.forEach((p)=>{
 
-
-console.log("Hej"+ p)
-        //Loggar scoret
-        console.log(persons[p].score);
-        //Loggar personens namn
-        console.log(p);
         //Skapar ett h2 element och lägger till texten på hur många poäng personen fick
         let h2 = document.createElement("h2");
         h2.innerText+=(p+" Fick: "+persons[p].score);
@@ -270,4 +277,3 @@ function updateScoreBoard(){
 
 
 }
-//
