@@ -65,10 +65,7 @@ function renderOne(person){
     h2.appendChild(btn);
     //Slänger på diven på en div med klassen namnes
     document.querySelector(".names").appendChild(div);
-    if(document.querySelector(".mainDiv")!=undefined){
-        document.querySelector(".mainDiv").remove();
-        renderCourt();
-    }
+    updateScoreBoard();
 
 }
 function removePlayer(e){
@@ -77,6 +74,14 @@ function removePlayer(e){
     delete persons[e.target.id];
     console.log(persons);
     persistToLocaleStorage();
+    if(Object.keys(persons).length==0){
+        if(document.querySelector(".mainDiv")!=undefined){
+            document.querySelector(".mainDiv").remove();
+        }
+        if(document.querySelector(".ResultatsDiv")!=undefined){
+            document.querySelector(".ResultatsDiv").remove();
+        }
+    }
     updateScoreBoard();
 }
 
