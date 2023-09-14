@@ -164,7 +164,7 @@ function renderCourt(){
     //Slänger ut knappen på skärmen
     document.querySelector(".mainDiv").appendChild(knapp); */
 
-    
+
     //Loggar personer
     console.log(persons);
 }}
@@ -265,3 +265,4 @@ function updateScoreBoard(){
 
 
 }
+//
