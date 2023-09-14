@@ -3,6 +3,7 @@
 	padding: 1%;
 	border: 3px solid #ddd;
     margin: 1px;
+	text-align: center;
 }
 
 @media screen and (min-width: 600px) {

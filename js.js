@@ -155,7 +155,7 @@ function renderCourt(){
            i.addEventListener("input",saveScore);
            //Consol loggar vad den har för värde
            console.log((i.value));
-
+text.appendChild(i);
            //Slänger ut texten och input saken på skärmen
            div.appendChild(text);
            div.appendChild(i);
