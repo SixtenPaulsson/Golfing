@@ -144,10 +144,16 @@ function renderCourt(){
         }
         //Slänger på hela course saken på skärmen
         mainDiv.appendChild(div);
-
+        if(document.querySelector(".ResultatsDiv")!=undefined){
+            document.querySelector(".ResultatsDiv").remove();
+            
+        }
+        färdig();
     });
     document.querySelector(".courses").appendChild(mainDiv);
-    //Skapar en redo knapp
+
+
+    /* //Skapar en redo knapp
     let knapp =document.createElement("input");
     //Lägger typen button
     knapp.type="button";
@@ -156,7 +162,9 @@ function renderCourt(){
     //Lägger till en eventlistenr som leder till resultat saken
     knapp.addEventListener("click",färdig);
     //Slänger ut knappen på skärmen
-    document.querySelector(".mainDiv").appendChild(knapp);
+    document.querySelector(".mainDiv").appendChild(knapp); */
+
+    
     //Loggar personer
     console.log(persons);
 }}
