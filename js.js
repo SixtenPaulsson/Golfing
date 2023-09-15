@@ -1,3 +1,4 @@
+getCourt();
 //Tar från local storage samt renderar in dom
 let persons = JSON.parse(localStorage.getItem("persons")) || {};
 for(let p in persons){
@@ -7,7 +8,7 @@ for(let p in persons){
 //Savar
 persistToLocaleStorage();
 //Hämtar json
-getCourt();
+
 //Savar
 function persistToLocaleStorage(){
     localStorage.setItem("persons", JSON.stringify(persons));
@@ -34,7 +35,8 @@ function handleSubmit(e){
     //Lägg till array till Locale Storage
     persistToLocaleStorage();
     //Renderar namnet
-    renderOne(persons[e.target.name.value])
+    renderOne(persons[e.target.name.value]);
+    if(document.querySelector(".mainDiv")==undefined){renderCourt()}
 //Emptyar boxen
     e.target.name.value = "";
 }
@@ -58,12 +60,9 @@ function renderOne(person){
     //Skapar en div samt header2
     let div = document.createElement("div");
     let h2 = document.createElement("h2");
-    let btn=document.createElement("input");
-    btn.type="button";
-    btn.addEventListener("click",removePlayer)
-    btn.value="Remove"
-    btn.className=person.name+"-person";
-    btn.id=person.name;
+    h2.addEventListener("click",removePlayer);
+    h2.className=person.name+"-person";
+    h2.id=person.name;
     // lägger id på diven
 
     div.id = person.name+"-person";
@@ -72,7 +71,6 @@ function renderOne(person){
     h2.innerText = person.name+" ";
     //Slänger in h2 på diven
     div.appendChild(h2);
-    h2.appendChild(btn);
     //Slänger på diven på en div med klassen namnes
     document.querySelector(".names").appendChild(div);
     updateScoreBoard();
@@ -103,13 +101,16 @@ async function getCourt(){
 let response =await fetch("info.json");
 court=await response.json();
 console.log(court);
+renderCourt();
 }
 
 //Renderar alla courtsen
 function renderCourt(){
     //Checkar så att man faktiskt redan har en spelare
     if(Object.keys(persons).length!=0){
-
+        if(document.querySelector(".mainDiv")!=undefined){
+            document.querySelector(".mainDiv").remove();
+        }
 
     let mainDiv=document.createElement("div");
     mainDiv.className="mainDiv";
@@ -122,9 +123,14 @@ function renderCourt(){
         let div=document.createElement("div");
         div.classList="holeInputDiv";
         div.id=c.id;
-        let bantext=document.createElement("p");
+
+
+        let bantext=document.createElement("h4");
         bantext.innerText=(c.id+": "+c.info+" (Par är "+c.par+")")
-        div.appendChild(bantext);
+        let div2=document.createElement("div");
+        div2.appendChild(bantext);
+        div2.className="container2";
+        div.appendChild(div2);
 
 
         //För varje person lägger till namnet samt en textruta
@@ -155,10 +161,10 @@ function renderCourt(){
            i.addEventListener("input",saveScore);
            //Consol loggar vad den har för värde
            console.log((i.value));
+           
 text.appendChild(i);
            //Slänger ut texten och input saken på skärmen
            div.appendChild(text);
-           div.appendChild(i);
         }
         //Slänger på hela course saken på skärmen
         mainDiv.appendChild(div);
@@ -190,10 +196,12 @@ text.appendChild(i);
 function saveScore(e){
 console.log(e.target);
 
-    if(e.target.value==""){e.target.value=0;}
+
+
+    let result = parseInt(e.target.value);
+    if(e.target.value==""){result=0;}
     let name = e.target.name;
 	let holeId = e.target.dataset.id;
-	let result = parseInt(e.target.value);
 
     if(persons[name][holeId]==undefined){persons[name][holeId]=0}
     console.log(persons[name][holeId]+" "+result)
@@ -215,53 +223,47 @@ persistToLocaleStorage();
 }
 //Räknar ihop scoresen och sen slänger upp den på skärmen(inte i storleksordning dock)
 function färdig(){
-
-
-if(document.querySelector(".ResultatsDiv")!=undefined){
+  if(document.querySelector(".ResultatsDiv")!=undefined){
     document.querySelector(".ResultatsDiv").remove();
-}
+  }
+  //Skapar en div
+  let div= document.createElement("div");
+  div.className="ResultatsDiv";
+  let pMin; 
+  let PminNamn;
+  //Går igenom varenda person
+  let Keys=Object.keys(persons);
+  //console.log(Keys);
+  Keys.sort((a,b)=>persons[a]["score"]-persons[b]["score"]);
+  //console.log(Keys);
+
+  Keys.forEach((p)=>
+  {
+    //Skapar ett h2 element och lägger till texten på hur många poäng personen fick
+    let h2 = document.createElement("h2");
+    h2.innerText+=((Keys.indexOf(p)+1)+". "+p+" Fick: "+persons[p].score);
+
+    //Slänger på texten på diven
+    div.appendChild(h2);
+    //Slänger på diven på skärmen
+    let results=document.querySelector(".results");
+    results.appendChild(div);
 
 
-//Skapar en div
-let div= document.createElement("div");
-div.className="ResultatsDiv";
-var pMin; 
-var PminNamn;
-//Går igenom varenda person
-
-
-let Keys=Object.keys(persons);
-//console.log(Keys);
-Keys.sort((a,b)=>persons[a]["score"]-persons[b]["score"]);
-//console.log(Keys);
-
-Keys.forEach((p)=>{
-
-        //Skapar ett h2 element och lägger till texten på hur många poäng personen fick
-        let h2 = document.createElement("h2");
-        h2.innerText+=(p+" Fick: "+persons[p].score);
-
-        //Slänger på texten på diven
-        div.appendChild(h2);
-        //Slänger på diven på skärmen
-        let results=document.querySelector(".results");
-        results.appendChild(div);
-
-
-        if(pMin>persons[p].score||pMin==undefined){ pMin=persons[p].score; PminNamn=p}
+    if(pMin>persons[p].score||pMin==undefined){ pMin=persons[p].score; PminNamn=p}
         
-        else if(pMin==persons[p].score){PminNamn+=(" och "+p)}
-        console.log("Pmin="+pMin+" p="+persons[p].score);
+    else if(pMin==persons[p].score){PminNamn+=(" och "+p)}
+    console.log("Pmin="+pMin+" p="+persons[p].score);
 
-    });
-        let h2 = document.createElement("h2");
-        h2.innerText+=(PminNamn+" vann!");
+  });
+  let h2 = document.createElement("h2");
+  h2.innerText+=(PminNamn+" vann!");
 
-        //Slänger på texten på diven
-        div.appendChild(h2);
-        //Slänger på diven på skärmen
-        let results=document.querySelector(".results");
-        results.appendChild(div);
+  //Slänger på texten på diven
+  div.appendChild(h2);
+  //Slänger på diven på skärmen
+  let results=document.querySelector(".results");
+  results.appendChild(div);
 }
 
 
@@ -274,6 +276,4 @@ function updateScoreBoard(){
         document.querySelector(".ResultatsDiv").remove();
         färdig();
     }
-
-
 }

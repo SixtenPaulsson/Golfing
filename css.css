@@ -1,15 +1,28 @@
-.courses .mainDiv div {
-	width: 400px;
+
+h1{
+	text-align: center;
+}
+form{
+	margin:0 auto;
 	padding: 1%;
-	border: 3px solid #ddd;
-    margin: 1px;
 	text-align: center;
 }
 
-@media screen and (min-width: 600px) {
+.courses .mainDiv .holeInputDiv {
+	width: 400px;
+	padding: 0%;
+	border: 3px solid #ddd;
+	text-align: center;
+	width:  90%;
+	margin: 0 auto;
+    margin-top: 0.5%;
+}
 
-	.courses div {
-		display: flex;
-		display: block;
-	}
+.ResultatsDiv{
+	text-align: center;
+}
+
+.courses .mainDiv .holeInputDiv Div{
+	border-bottom: 4px solid #ddd;
+
 }
